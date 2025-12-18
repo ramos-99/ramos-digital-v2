@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Disable this rule - our useScrollReveal hook returns isRevealed as state,
+      // not a ref value, but ESLint incorrectly flags it because it's in the same object as ref
+      "react-hooks/refs": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
+
