@@ -1,11 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { GithubIcon, LinkedinIcon, MailIcon } from "@/app/components/ui/Icons";
 
 export function Footer() {
-    const { language, setLanguage, t } = useLanguage();
+    const t = useTranslations();
+    const locale = useLocale();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleLanguageChange = (newLocale: string) => {
+        router.replace(pathname, { locale: newLocale });
+    };
 
     return (
         <footer className="py-8 md:py-16 px-4 md:px-6 border-t border-white/5">
@@ -56,14 +63,14 @@ export function Footer() {
                 <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
                     <p
                         className="text-white/20 text-xs font-mono"
-                        dangerouslySetInnerHTML={{ __html: t("footer_built") }}
+                        dangerouslySetInnerHTML={{ __html: t.raw("footer_built") }}
                     />
 
                     {/* Language Switcher */}
                     <div className="flex items-center bg-white/5 border border-white/10 rounded-full p-1">
                         <button
-                            onClick={() => setLanguage("pt")}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${language === "pt"
+                            onClick={() => handleLanguageChange("pt")}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${locale === "pt"
                                 ? "bg-white text-black shadow-sm"
                                 : "text-gray-400 hover:text-white"
                                 }`}
@@ -71,8 +78,8 @@ export function Footer() {
                             PT
                         </button>
                         <button
-                            onClick={() => setLanguage("en")}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${language === "en"
+                            onClick={() => handleLanguageChange("en")}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${locale === "en"
                                 ? "bg-white text-black shadow-sm"
                                 : "text-gray-400 hover:text-white"
                                 }`}

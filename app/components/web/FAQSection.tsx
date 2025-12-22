@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { useLanguage } from "@/app/context/LanguageContext";
 import { useScrollReveal } from "@/app/hooks/useScrollReveal";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export function FAQSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
     const reveal = useScrollReveal();
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     const faqs = [
-        { q: t("faq_q1"), a: t("faq_a1") },
-        { q: t("faq_q2"), a: t("faq_a2") },
-        { q: t("faq_q3"), a: t("faq_a3") },
+        { q: t("faq_q1"), a: t.raw("faq_a1") },
+        { q: t("faq_q2"), a: t.raw("faq_a2") },
+        { q: t("faq_q3"), a: t.raw("faq_a3") },
     ];
 
     const toggleFaq = (index: number) => {

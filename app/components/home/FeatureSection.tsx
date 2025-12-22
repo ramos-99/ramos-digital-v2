@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useTranslations } from "next-intl";
 
 // Feature Section Component
 export function FeatureSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     return (
         <section
@@ -15,7 +15,7 @@ export function FeatureSection() {
             {/* Background Image */}
             <Image
                 src="/assets/img/feature-keyboard.jpeg"
-                alt="Mechanical Keyboard Setup"
+                alt={t("feature_img_alt")}
                 fill
                 className="object-cover -z-10"
                 priority
@@ -32,7 +32,7 @@ export function FeatureSection() {
                 <div className="max-w-2xl">
                     <h2
                         className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6 leading-tight"
-                        dangerouslySetInnerHTML={{ __html: t("feature_title") }}
+                        dangerouslySetInnerHTML={{ __html: t.raw("feature_title") }}
                     />
                     <p className="text-lg text-white/60 leading-relaxed mb-8">
                         {t("feature_desc")}

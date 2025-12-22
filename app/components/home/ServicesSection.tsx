@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useLanguage } from "@/app/context/LanguageContext";
 import { useScrollReveal } from "@/app/hooks/useScrollReveal";
+import { useTranslations } from "next-intl";
 
 // Services Section Component  
 export function ServicesSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
     const [auditInput, setAuditInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [buttonText, setButtonText] = useState<string | null>(null);
@@ -57,6 +57,7 @@ export function ServicesSection() {
                         <input
                             type="text"
                             placeholder={t("services_audit_placeholder")}
+                            aria-label={t("services_audit_placeholder")}
                             className="flex-1 bg-transparent text-white text-sm placeholder:text-white/30 focus:outline-none px-5 py-4"
                             value={auditInput}
                             onChange={(e) => setAuditInput(e.target.value)}

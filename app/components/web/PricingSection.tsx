@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useLanguage } from "@/app/context/LanguageContext";
 import { useScrollReveal } from "@/app/hooks/useScrollReveal";
+import { useTranslations } from "next-intl";
 
 export function PricingSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
     const reveal = useScrollReveal();
 
     return (
@@ -22,14 +22,14 @@ export function PricingSection() {
                 >
                     <h2
                         className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold"
-                        dangerouslySetInnerHTML={{ __html: t("pricing_title") }}
+                        dangerouslySetInnerHTML={{ __html: t.raw("pricing_title") }}
                     />
                 </div>
 
                 <div className="p-6 md:p-10 rounded-2xl glass-card border border-white/10 text-center">
                     <p
                         className="text-lg text-white/70 mb-8 max-w-xl mx-auto leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: t("pricing_desc") }}
+                        dangerouslySetInnerHTML={{ __html: t.raw("pricing_desc") }}
                     />
 
                     <div className="flex flex-wrap justify-center gap-6 mb-10">

@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useTranslations } from "next-intl";
 
 export function HeroSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     return (
         <section className="min-h-screen flex items-center justify-center relative px-4 md:px-6 pt-20 md:pt-24">
@@ -17,7 +17,7 @@ export function HeroSection() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     className="font-heading text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6"
-                    dangerouslySetInnerHTML={{ __html: t("hero_title") }}
+                    dangerouslySetInnerHTML={{ __html: t.raw("hero_title") }}
                 />
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}

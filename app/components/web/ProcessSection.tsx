@@ -1,10 +1,10 @@
 "use client";
 
-import { useLanguage } from "@/app/context/LanguageContext";
 import { useScrollReveal } from "@/app/hooks/useScrollReveal";
+import { useTranslations } from "next-intl";
 
 export function ProcessSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
     const reveal = useScrollReveal();
 
     return (

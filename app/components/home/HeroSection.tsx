@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useTranslations } from "next-intl";
 
 export function HeroSection() {
-  const { t } = useLanguage();
+  const t = useTranslations();
   const spotlightRef = useRef<HTMLDivElement>(null);
   const [spotlightOpacity, setSpotlightOpacity] = useState(0);
 
@@ -74,7 +74,7 @@ export function HeroSection() {
 
         <p
           className="text-base md:text-lg text-white/30 max-w-xl mx-auto mb-10 md:mb-14 leading-relaxed px-2"
-          dangerouslySetInnerHTML={{ __html: t("hero_desc") }}
+          dangerouslySetInnerHTML={{ __html: t.raw("hero_desc") }}
         />
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

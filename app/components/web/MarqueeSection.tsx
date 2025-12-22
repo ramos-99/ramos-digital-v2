@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useTranslations } from "next-intl";
 
 // Integration logos for marquee
 const integrations = [
@@ -18,7 +18,7 @@ const integrations = [
 ];
 
 export function MarqueeSection() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     return (
         <section className="py-24 bg-[#0A0A0B] overflow-hidden relative">
