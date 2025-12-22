@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { ArrowUpRightIcon } from "@/app/components/ui/Icons";
 
 export function Navbar() {
     const { t } = useLanguage();
@@ -40,19 +41,7 @@ export function Navbar() {
                         className="flex items-center gap-1 text-xs md:text-sm text-white font-medium hover:text-electric-400 transition-colors group"
                     >
                         <span>{t("nav_web")}</span>
-                        <svg
-                            className="w-3 h-3 md:w-3.5 md:h-3.5 text-white/50 group-hover:text-electric-400 transition-colors"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M7 17L17 7M17 7H7M17 7V17"
-                            />
-                        </svg>
+                        <ArrowUpRightIcon className="w-3 h-3 md:w-3.5 md:h-3.5 text-white/50 group-hover:text-electric-400 transition-colors" />
                     </Link>
 
                     {/* Right: Contact Button */}
