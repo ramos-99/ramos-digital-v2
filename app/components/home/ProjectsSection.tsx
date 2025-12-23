@@ -65,7 +65,7 @@ export function ProjectsSection() {
               <span className="text-electric-400">.</span>
             </h2>
             <span className="text-sm font-mono text-neutral-500 hidden md:inline-block">
-              (2023 — 2024)
+              (2025)
             </span>
           </div>
 

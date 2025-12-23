@@ -1,23 +1,19 @@
 
+import { Navbar } from "@/app/components/Navbar";
+import { Footer } from "@/app/components/Footer";
 import { HeroSection } from "@/app/components/web/HeroSection";
-import { MarqueeSection } from "@/app/components/web/MarqueeSection";
-import { ComparisonSection } from "@/app/components/web/ComparisonSection";
-import { ProcessSection } from "@/app/components/web/ProcessSection";
-import { PricingSection } from "@/app/components/web/PricingSection";
-import { FAQSection } from "@/app/components/web/FAQSection";
-import { ContactSection } from "@/app/components/web/ContactSection";
 
-// Main Web Page Component
 export default function WebPage() {
     return (
-        <>
+        <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
+            <Navbar />
             <HeroSection />
-            <MarqueeSection />
-            <ComparisonSection />
-            <ProcessSection />
-            <PricingSection />
-            <FAQSection />
-            <ContactSection />
-        </>
+            {/* Temporary Placeholder Content */}
+            <section className="container mx-auto px-6 py-24">
+                <h2 className="text-3xl font-light mb-8">Selected Web Projects</h2>
+                <p className="text-neutral-500">Project list coming soon...</p>
+            </section>
+            <Footer />
+        </main>
     );
 }

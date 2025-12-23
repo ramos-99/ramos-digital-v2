@@ -8,19 +8,18 @@ export function Footer() {
     return (
         <footer className="bg-neutral-950 border-t border-white/5 text-white overflow-hidden">
             {/* 1. The Spectacular Top Row */}
-            <div className="w-full">
+            {/* 1. The Spectacular Top Row */}
+            <div className="w-full px-4 md:px-6 py-24 md:py-32 flex justify-center items-center">
                 <a
                     href="mailto:martim@ramosdigital.pt"
-                    className="block w-full group relative overflow-hidden"
+                    className="group relative flex items-center justify-center p-4"
                 >
-                    <div className="px-4 md:px-6 py-24 md:py-32 flex justify-center items-center">
-                        <h1 className="text-[9vw] leading-none font-light tracking-tighter text-center whitespace-nowrap text-neutral-500 group-hover:text-white transition-colors duration-500 flex items-center gap-4 md:gap-8">
-                            {t("footer_talk")}
-                            <span className="text-[4vw] opacity-0 -translate-x-8 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 font-thin text-white">
-                                ↗
-                            </span>
-                        </h1>
-                    </div>
+                    <h1 className="text-[9vw] leading-none font-light tracking-tighter text-center whitespace-nowrap text-neutral-500 group-hover:text-white transition-colors duration-500 flex items-center gap-4 md:gap-8">
+                        {t("footer_talk")}
+                        <span className="text-[4vw] opacity-0 -translate-x-8 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 font-thin text-white">
+                            ↗
+                        </span>
+                    </h1>
                 </a>
             </div>
 
