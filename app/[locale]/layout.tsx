@@ -1,25 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "../globals.css";
 import { LenisProvider } from "@/app/components/LenisProvider";
 import { Navbar } from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-  adjustFontFallback: true,
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  display: "swap",
-  adjustFontFallback: true,
-});
 
 export const metadata: Metadata = {
   title: "Martim Ramos | Software Engineer & Creative Web Developer",
@@ -64,7 +51,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} bg-[#0A0A0B] text-white font-sans antialiased overflow-x-hidden`}
+        className={`${GeistSans.variable} ${GeistMono.variable} bg-[#0A0A0B] text-white font-sans antialiased overflow-x-hidden`}
       >
         <NextIntlClientProvider messages={messages}>
           <LenisProvider>

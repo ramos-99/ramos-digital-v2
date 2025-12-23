@@ -16,7 +16,7 @@ export function HeroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="font-heading text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6"
+                    className="font-heading text-4xl sm:text-6xl md:text-8xl font-bold tracking-tight mb-4 md:mb-6"
                     dangerouslySetInnerHTML={{ __html: t.raw("hero_title") }}
                 />
                 <motion.p

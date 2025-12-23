@@ -1,176 +1,154 @@
 "use client";
 
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import BlurFade from "@/app/components/ui/BlurFade";
 
-// Projects Section Component
+// Project Data
+const projects = [
+  {
+    key: "project_ramos",
+    src: "/mannequin-baked.jpg",
+    color: "#000000",
+  },
+  {
+    key: "project_fintech",
+    src: "/fintech-concept.png",
+    color: "#1e1e2e",
+  },
+  {
+    key: "project_food",
+    src: "/food-concept.png",
+    color: "#2a2a2a",
+  },
+];
+
 export function ProjectsSection() {
-    const t = useTranslations();
+  const t = useTranslations();
+  const [activeProject, setActiveProject] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    const themes = {
-        electric: {
-            borderHover: "hover:border-electric-500/30",
-            bgGradient: "bg-gradient-to-br from-electric-500/20 via-dark-800 to-amber-500/10",
-            iconBg: "bg-electric-500/20",
-            iconBorder: "border-electric-500/30",
-            text: "text-electric-400",
-        },
-        amber: {
-            borderHover: "hover:border-amber-500/30",
-            bgGradient: "bg-gradient-to-br from-amber-500/20 via-dark-800 to-orange-500/10",
-            iconBg: "bg-amber-500/20",
-            iconBorder: "border-amber-500/30",
-            text: "text-amber-400",
-        },
-        emerald: {
-            borderHover: "hover:border-emerald-500/30",
-            bgGradient: "bg-gradient-to-br from-emerald-500/20 via-dark-800 to-teal-500/10",
-            iconBg: "bg-emerald-500/20",
-            iconBorder: "border-emerald-500/30",
-            text: "text-emerald-400",
-        },
-    };
+  // Scroll Progress for smooth entry/exit
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"], // Track from when section enters bottom to when it leaves top
+  });
 
-    const projects = [
-        {
-            name: "Ramos Digital",
-            domain: "ramosdigital.pt",
-            description: t("project_ramos_desc"),
-            tags: ["Tailwind CSS", "Performance"],
-            theme: "electric" as const,
-            initials: "RD",
-            type: t("project_ramos_type"),
-        },
-        {
-            name: "Sarmento At Home",
-            domain: "sarmentoathome.pt",
-            description: t("project_sarmento_desc"),
-            tags: ["Next.js", "E-Commerce"],
-            theme: "amber" as const,
-            initials: "SA",
-            type: t("project_sarmento_type"),
-        },
-        {
-            name: "SS Financial",
-            domain: "ssfinancial.concept",
-            description: t("project_financial_desc"),
-            tags: ["Figma", "UI Design"],
-            theme: "emerald" as const,
-            initials: "SS",
-            type: t("project_financial_type"),
-        },
-    ];
+  // Smooth scroll opacity: fade in (0-0.15) and fade out (0.85-1)
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  // Smooth scroll blur: blur out (0-0.15) and blur in (0.85-1)
+  const filter = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], ["blur(10px)", "blur(0px)", "blur(0px)", "blur(10px)"]);
+  // Subtle scale effect: slowly scale up (0.95 -> 1)
+  const scale = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.95, 1, 1, 0.95]);
 
-    return (
-        <section id="projects" className="py-8 md:py-32 px-4 md:px-6 relative">
-            <div className="max-w-6xl mx-auto">
-                {/* Section Header */}
-                <div className="mb-12">
-                    <div className="flex items-end justify-between">
-                        <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold">
-                            {t("projects_title")}
-                            <span className="text-electric-400">.</span>
-                        </h2>
-                        <p className="text-white/40 text-sm hidden md:block">
-                            {t("projects_scroll_hint")}
-                        </p>
+
+  // Default to first project if none active
+  const currentProjectIndex = activeProject !== null ? activeProject : 0;
+  const currentProject = projects[currentProjectIndex];
+
+  return (
+    <motion.section
+      ref={containerRef}
+      id="projects"
+      className="bg-white py-24 md:py-32 px-4 md:px-6 relative"
+      style={{ opacity, filter, scale }}
+    >
+      <BlurFade yOffset={40} blur="20px">
+        <div className="max-w-7xl mx-auto">
+
+          {/* Header */}
+          <div className="mb-16 md:mb-24 flex items-baseline gap-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-black tracking-tight">
+              {t("projects_title")}
+              <span className="text-electric-400">.</span>
+            </h2>
+            <span className="text-sm font-mono text-neutral-500 hidden md:inline-block">
+              (2023 — 2024)
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+            {/* Left Column: Project List */}
+            <div className="flex flex-col gap-12 md:gap-0 relative z-20">
+              {projects.map((project, index) => {
+                const isHovered = activeProject === index;
+                const isDimmed = activeProject !== null && !isHovered;
+
+                return (
+                  <div
+                    key={project.key}
+                    onMouseEnter={() => setActiveProject(index)}
+                    onMouseLeave={() => setActiveProject(null)}
+                    className="group py-0 md:py-12 md:border-t border-neutral-200 cursor-pointer transition-opacity duration-500"
+                    style={{ opacity: isDimmed ? 0.3 : 1 }}
+                  >
+                    <div className="flex flex-col gap-4 md:gap-2">
+                      {/* Mobile Image (Inline) */}
+                      <div className="lg:hidden w-full aspect-[4/3] relative rounded-xl overflow-hidden mb-4">
+                        <Image
+                          src={project.src}
+                          alt={t(`${project.key}_title`)}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <span className="text-xs font-mono text-neutral-400">
+                        0{index + 1}
+                      </span>
+                      <h3 className="text-3xl md:text-5xl font-medium text-black tracking-tight group-hover:translate-x-2 transition-transform duration-500">
+                        {t(`${project.key}_title`)}
+                      </h3>
+                      <div className="flex justify-between items-center mt-2">
+                        <span className="text-sm md:text-base font-mono text-neutral-500">
+                          {t(`${project.key}_type`)}
+                        </span>
+                        <span className="text-sm font-mono text-neutral-400">
+                          {t(`${project.key}_status`)}
+                        </span>
+                      </div>
                     </div>
-                </div>
-
-                {/* Horizontal Scroll Container */}
-                <div className="overflow-x-auto hide-scrollbar pb-4 -mx-6 px-6">
-                    <div className="flex gap-6 snap-x snap-mandatory" style={{ width: "max-content" }}>
-                        {projects.map((project, index) => {
-                            const theme = themes[project.theme];
-                            return (
-                                <div key={index} className="group w-[300px] md:w-[400px] snap-start">
-                                    <div
-                                        className={`rounded-2xl glass-card border border-white/10 ${theme.borderHover} transition-all duration-500 overflow-hidden`}
-                                    >
-                                        {/* Window Header */}
-                                        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.02]">
-                                            <div className="flex gap-2">
-                                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                                            </div>
-                                            <span className="text-white/40 text-xs font-mono ml-2">
-                                                {project.domain}
-                                            </span>
-                                        </div>
-
-                                        {/* Project Preview */}
-                                        <div
-                                            className={`h-48 ${theme.bgGradient} flex items-center justify-center`}
-                                        >
-                                            <div className="text-center">
-                                                <div
-                                                    className={`w-16 h-16 rounded-2xl ${theme.iconBg} border ${theme.iconBorder} flex items-center justify-center mx-auto mb-4`}
-                                                >
-                                                    <span
-                                                        className={`font-heading text-2xl font-bold ${theme.text}`}
-                                                    >
-                                                        {project.initials}
-                                                    </span>
-                                                </div>
-                                                <p className="text-white/60 text-sm">
-                                                    {project.type}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        {/* Project Info */}
-                                        <div className="p-6">
-                                            <h3 className="font-heading text-xl font-semibold mb-2">
-                                                {project.name}
-                                            </h3>
-                                            <p className="text-white/50 text-sm mb-4">{project.description}</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {project.tags.map((tag, tagIndex) => (
-                                                    <span
-                                                        key={tagIndex}
-                                                        className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-white/60"
-                                                    >
-                                                        {tag}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-
-                        {/* View All Projects Card */}
-                        <div className="group w-[300px] snap-start">
-                            <button
-                                type="button"
-                                className="block h-full w-full rounded-2xl glass-card border border-white/10 hover:border-white/20 transition-all duration-500 flex items-center justify-center min-h-[380px] cursor-not-allowed text-left"
-                                aria-label={t("projects_view_all_aria")}
-                            >
-                                <div className="text-center p-8 w-full">
-                                    <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center mx-auto mb-4 group-hover:border-electric-500/50 group-hover:bg-electric-500/10 transition-all duration-300">
-                                        <svg
-                                            className="w-6 h-6 text-white/40 group-hover:text-electric-400 transition-colors"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <p className="text-white/60 font-medium">{t("projects_view_all")}</p>
-                                    <p className="text-white/30 text-sm mt-1">{t("projects_coming_soon")}</p>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                  </div>
+                );
+              })}
+              <div className="hidden md:block border-t border-neutral-200" />
             </div>
-        </section>
-    );
+
+            {/* Right Column: Sticky Image Canvas */}
+            <div className="hidden lg:block h-[80vh] sticky top-24 rounded-3xl bg-neutral-50 border border-neutral-100 p-8 overflow-hidden">
+
+              {/* Centered Image Container */}
+              <div className="relative w-full h-full flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentProject ? currentProject.key : "empty"}
+                    className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl"
+                    initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                  >
+                    {currentProject && (
+                      <Image
+                        src={currentProject.src}
+                        alt={t(`${currentProject.key}_title`)}
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </BlurFade>
+    </motion.section>
+  );
 }

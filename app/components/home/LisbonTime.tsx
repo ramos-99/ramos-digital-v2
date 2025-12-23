@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 
 // Lisbon Time Widget Component
-export function LisbonTime() {
+// Lisbon Time Widget Component
+export function LisbonTime({ className = "" }: { className?: string }) {
     const [time, setTime] = useState("--:--:--");
 
     useEffect(() => {
@@ -12,9 +13,9 @@ export function LisbonTime() {
                 timeZone: "Europe/Lisbon",
                 hour: "2-digit",
                 minute: "2-digit",
-                second: "2-digit",
+
             });
-            setTime(now);
+            setTime(now + " GMT");
         };
 
         updateTime();
@@ -23,7 +24,7 @@ export function LisbonTime() {
     }, []);
 
     return (
-        <p className="text-3xl font-heading font-bold text-white tabular-nums">
+        <p className={className}>
             {time}
         </p>
     );

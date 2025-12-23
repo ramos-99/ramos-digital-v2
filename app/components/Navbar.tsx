@@ -32,31 +32,38 @@ export function Navbar() {
     const navLinkDest = isWebPage ? "/" : "/web";
     const navLinkText = isWebPage ? t("nav_home") : t("nav_work");
 
+    // Frosted Glass Navbar - Black text for visibility on light backgrounds
+    const textColor = "text-black";
+    const textMuted = "text-black/50";
+    const textActive = "text-black";
+    const dotColor = "bg-black";
+    const btnBg = "bg-black text-white";
+
     return (
         <>
             <motion.nav
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-3xl px-4 md:px-2"
+                className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md md:max-w-3xl px-0 md:px-2"
             >
-                <div className="bg-[#0A0A0B]/80 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl shadow-black/50 px-4 md:px-6 py-2.5 md:py-3 flex items-center justify-between">
+                <div className="px-6 py-2 flex items-center justify-between rounded-full bg-zinc-100 border border-black/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
                     {/* Logo (Home Link) */}
                     <Link
                         href="/"
-                        className="font-heading font-semibold text-base md:text-lg tracking-tight flex items-center gap-2 hover:opacity-80 transition-opacity"
+                        className={`font-heading font-semibold text-base md:text-lg tracking-tight flex items-center gap-2 hover:opacity-80 transition-all duration-300 ${textColor}`}
                     >
-                        <div className="w-2 h-2 rounded-full bg-electric-400" />
-                        <span className="text-white">martim</span>
+                        <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${dotColor}`} />
+                        <span>martim</span>
                     </Link>
 
                     {/* Center: Smart Main Link */}
                     <Link
                         href={navLinkDest}
-                        className="flex items-center gap-1 text-xs md:text-sm text-white font-medium hover:text-electric-400 transition-colors group absolute left-1/2 -translate-x-1/2"
+                        className={`flex items-center gap-1 text-xs md:text-sm font-medium hover:opacity-70 transition-all duration-300 group absolute left-1/2 -translate-x-1/2 ${textColor}`}
                     >
                         <span>{navLinkText}</span>
-                        <ArrowUpRightIcon className="w-3 h-3 md:w-3.5 md:h-3.5 text-white/50 group-hover:text-electric-400 transition-colors" />
+                        <ArrowUpRightIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                     </Link>
 
                     {/* Right: Language + Contact */}
@@ -66,17 +73,15 @@ export function Navbar() {
                             <button
                                 onClick={() => switchLanguage("pt")}
                                 disabled={isPending}
-                                className={`transition-colors ${locale === "pt" ? "text-white" : "text-white/40 hover:text-white/70"
-                                    }`}
+                                className={`transition-all duration-300 ${locale === "pt" ? textActive : textMuted} hover:opacity-80`}
                             >
                                 PT
                             </button>
-                            <span className="text-white/20">|</span>
+                            <span className={`transition-colors duration-300 ${textMuted}`}>|</span>
                             <button
                                 onClick={() => switchLanguage("en")}
                                 disabled={isPending}
-                                className={`transition-colors ${locale === "en" ? "text-white" : "text-white/40 hover:text-white/70"
-                                    }`}
+                                className={`transition-all duration-300 ${locale === "en" ? textActive : textMuted} hover:opacity-80`}
                             >
                                 EN
                             </button>
@@ -85,7 +90,7 @@ export function Navbar() {
                         {/* Contact Button */}
                         <button
                             onClick={handleContactClick}
-                            className="text-xs md:text-sm px-3 md:px-5 py-1.5 md:py-2 rounded-full bg-white text-black font-semibold hover:scale-105 hover:bg-gray-100 transition-all shadow-lg shadow-white/10 cursor-pointer"
+                            className={`text-xs md:text-sm px-3 md:px-5 py-1.5 md:py-2 rounded-full font-semibold hover:scale-105 transition-all duration-300 cursor-pointer ${btnBg}`}
                         >
                             {t("nav_contact")}
                         </button>
