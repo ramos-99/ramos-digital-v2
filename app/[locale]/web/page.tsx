@@ -3,6 +3,7 @@ import CapabilitiesSection from "@/app/components/web/SystemCapabilities";
 import ContactSection from "@/app/components/web/ContactSection";
 
 export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 // React 19 / Next 15 Pattern for Params
 export default async function WebPage({ params }: { params: Promise<{ locale: string }> }) {
