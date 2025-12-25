@@ -4,11 +4,11 @@ import React, { useTransition, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { sendEmail } from "@/app/actions/send-email";
+import { submitContact } from "@/app/actions/submit-contact";
 import { clsx } from "clsx";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
-// Schema (Matched with Server Action)
+// Schema (Matched with Server Action logic, though validation is now manual in action)
 const formSchema = z.object({
     name: z.string().min(2, "Mínimo 2 caracteres"),
     email: z.string().email("Email inválido"),
@@ -42,7 +42,7 @@ export default function ContactSection() {
             formData.append("type", data.type);
             formData.append("message", data.message);
 
-            const result = await sendEmail(null, formData);
+            const result = await submitContact(null, formData);
 
             if (result.success) {
                 setServerState({ success: true });
@@ -117,7 +117,7 @@ export default function ContactSection() {
                 </div>
 
                 {/* DIREITA: THE FORM */}
-                <form action={sendEmail} onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+                <form action={submitContact} onSubmit={handleSubmit(onSubmit)} className="space-y-12">
 
                     {/* INPUT: NAME */}
                     <div className="group">

@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 import { Resend } from 'resend';
 
-export async function sendEmail(prevState: any, formData: FormData) {
+export async function submitContact(prevState: any, formData: FormData) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const name = formData.get('name') as string;
@@ -17,7 +17,7 @@ export async function sendEmail(prevState: any, formData: FormData) {
             from: 'Ramos Digital <system@ramosdigital.pt>',
             to: 'martim@ramosdigital.pt',
             subject: `Novo contacto: ${name}`,
-            reply_to: email,
+            reply_to: email, // Note: If this fails, user should change to 'replyTo'
             text: `Nome: ${name}\nEmail: ${email}\nTipo: ${type}\nMensagem: ${message}`,
         });
         return { success: true };
