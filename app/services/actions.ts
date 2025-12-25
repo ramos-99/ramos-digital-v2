@@ -15,7 +15,7 @@ export async function submitContact(formData: FormData) {
             from: 'Ramos Digital <system@ramosdigital.pt>',
             to: 'martim@ramosdigital.pt',
             subject: `Novo contacto: ${name}`,
-            reply_to: email,
+            replyTo: email,
             text: `Nome: ${name}\nEmail: ${email}\nTipo: ${type}\nMensagem: ${message}`,
         });
         return { success: true };
