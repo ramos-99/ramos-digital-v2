@@ -117,7 +117,7 @@ export default function ContactSection() {
                 </div>
 
                 {/* DIREITA: THE FORM */}
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+                <form action={sendEmail} onSubmit={handleSubmit(onSubmit)} className="space-y-12">
 
                     {/* INPUT: NAME */}
                     <div className="group">

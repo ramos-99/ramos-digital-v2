@@ -1,5 +1,7 @@
 'use server';
 
+export const runtime = 'edge';
+
 
 
 import { Resend } from 'resend';
