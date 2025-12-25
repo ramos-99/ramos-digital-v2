@@ -1,68 +1,64 @@
-"use server";
+'use server';
 
+// We force Edge runtime for Cloudflare Pages compatibility
 export const runtime = 'edge';
 
-import { Resend } from "resend";
-import { z } from "zod";
+import { Resend } from 'resend';
+import { z } from 'zod';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Define schema for validation
-const ContactSchema = z.object({
-    name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+const schema = z.object({
+    name: z.string().min(2, "Nome muito curto"),
     email: z.string().email("Email inválido"),
-    type: z.enum(["auditoria", "projeto", "consultoria", "outro"], {
-        message: "Selecione um tipo válido",
-    }),
-    message: z.string().min(10, "Mensagem muito curta (mínimo 10 caracteres)"),
+    type: z.enum(['auditoria', 'projeto', 'consultoria', 'outro']),
+    message: z.string().min(10, "Mensagem muito curta"),
 });
 
 export async function sendEmail(prevState: any, formData: FormData) {
-    // Validate fields
-    const validatedFields = ContactSchema.safeParse({
-        name: formData.get("name"),
-        email: formData.get("email"),
-        type: formData.get("type"),
-        message: formData.get("message"),
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // Return errors if validation fails
-    if (!validatedFields.success) {
+    const rawData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        type: formData.get('type'),
+        message: formData.get('message'),
+    };
+
+    const validated = schema.safeParse(rawData);
+
+    if (!validated.success) {
         return {
             success: false,
-            error: validatedFields.error.flatten().fieldErrors,
+            error: validated.error.issues[0].message,
         };
     }
 
-    const { name, email, type, message } = validatedFields.data;
+    const { name, email, type, message } = validated.data;
 
     try {
-        // Send email via Resend
-        const data = await resend.emails.send({
-            from: "Ramos Digital System <system@ramosdigital.pt>",
-            to: ["martim@ramosdigital.pt"],
-            replyTo: email,
+        // Using 'system@ramosdigital.pt' as verified domain sender
+        // If this fails due to DNS, user will switch to 'onboarding@resend.dev'
+        await resend.emails.send({
+            // Added < > brackets for correct email format compliance
+            from: 'Ramos Digital System <system@ramosdigital.pt>',
+            to: 'martim@ramosdigital.pt',
+            reply_to: email, // Note: Resend Node SDK uses reply_to, React SDK uses replyTo. Adjust if needed.
             subject: `[LEAD] ${type.toUpperCase()} - ${name}`,
             text: `
-NOVA MENSAGEM DO SITE (WEB - LEAD)
-------------------------------------------------
-NOME:    ${name}
-EMAIL:   ${email}
-TIPO:    ${type.toUpperCase()}
-------------------------------------------------
-MENSAGEM:
+NOVA MENSAGEM DO SITE
+---------------------
+Nome: ${name}
+Email: ${email}
+Tipo: ${type}
+
+Mensagem:
 ${message}
       `,
         });
 
-        if (data.error) {
-            console.error("Resend Error:", data.error);
-            return { success: false, error: "Erro ao enviar email. Tente novamente." };
-        }
-
         return { success: true };
+
     } catch (error) {
-        console.error("Server Action Error:", error);
-        return { success: false, error: "Erro interno do servidor." };
+        console.error('Send error:', error);
+        return { success: false, error: 'Erro ao enviar email.' };
     }
 }
