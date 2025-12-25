@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 import { Resend } from 'resend';
 
-export async function submitContact(prevState: any, formData: FormData) {
+export async function submitContact(formData: FormData) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const name = formData.get('name') as string;

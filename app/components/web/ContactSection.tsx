@@ -42,7 +42,7 @@ export default function ContactSection() {
             formData.append("type", data.type);
             formData.append("message", data.message);
 
-            const result = await submitContact(null, formData);
+            const result = await submitContact(formData);
 
             if (result.success) {
                 setServerState({ success: true });
