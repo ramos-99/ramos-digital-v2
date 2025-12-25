@@ -8,6 +8,8 @@ import { Footer } from "@/app/components/Footer";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   title: "Martim Ramos | Software Engineer & Creative Web Developer",
   description:
