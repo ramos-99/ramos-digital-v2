@@ -4,7 +4,7 @@ import React, { useTransition, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { submitContact } from "@/app/actions/submit-contact";
+import { submitContact } from "@/app/services/actions";
 import { clsx } from "clsx";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
