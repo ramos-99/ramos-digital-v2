@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useTransition, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { submitContact } from "@/app/services/actions";
 import { clsx } from "clsx";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
@@ -19,7 +18,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function ContactSection() {
-    const [isPending, startTransition] = useTransition();
+    const [isPending, setIsPending] = useState(false);
     const [serverState, setServerState] = useState<{ success?: boolean; error?: any }>({});
 
     const {
@@ -34,23 +33,33 @@ export default function ContactSection() {
         },
     });
 
-    const onSubmit = (data: FormData) => {
-        startTransition(async () => {
+    const onSubmit = async (data: FormData) => {
+        setIsPending(true);
+        try {
             const formData = new FormData();
             formData.append("name", data.name);
             formData.append("email", data.email);
             formData.append("type", data.type);
             formData.append("message", data.message);
 
-            const result = await submitContact(formData);
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                body: formData,
+            });
+
+            const result = await response.json();
 
             if (result.success) {
                 setServerState({ success: true });
-                reset(); // Clear form
+                reset();
             } else {
                 setServerState({ success: false, error: result.error });
             }
-        });
+        } catch (error) {
+            setServerState({ success: false, error: "Erro de rede" });
+        } finally {
+            setIsPending(false);
+        }
     };
 
     // --- RENDER: SUCCESS STATE ---
