@@ -91,5 +91,17 @@
     "faq_q3": "Can I edit text myself?",
     "faq_a3": "Yes! I can integrate a simple CMS (like Sanity or Contentful) so you can update content without touching code.",
     "contact_title": "Let's work together",
-    "contact_desc": "Send me your project details and I'll get back to you within 24 hours."
+    "contact_desc": "Send me your project details and I'll get back to you within 24 hours.",
+    "web_projects": {
+        "title": "Selected Works",
+        "project1_title": "Neon Cortex",
+        "project1_desc": "Next.js dashboard with real-time data visualization.",
+        "project1_tags": "React, D3.js, Tailwind",
+        "project2_title": "Astra Commerce",
+        "project2_desc": "Headless Shopify storefront with 3D product previews.",
+        "project2_tags": "Shopify, R3F, TypeScript",
+        "project3_title": "Zenith API",
+        "project3_desc": "High-performance banking interface.",
+        "project3_tags": "Vue, Node.js, gRPC"
+    }
 }

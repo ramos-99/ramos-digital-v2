@@ -1,132 +1,93 @@
 "use client";
-import { useEffect, useRef, useLayoutEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { AsciiEffect } from 'three-stdlib';
-import * as THREE from 'three';
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { TorusKnot, Environment, Float } from "@react-three/drei";
+import * as THREE from "three";
 
-// 1. ASCII Renderer (Production Mode)
-function AsciiRenderer() {
-    const { gl, size, scene, camera } = useThree();
-    const effectRef = useRef<AsciiEffect | null>(null);
-
-    useLayoutEffect(() => {
-        const characters = ' .:-+*=%@#';
-        const effect = new AsciiEffect(gl, characters, {
-            invert: true,
-            resolution: 0.18 // Clean, retro resolution
-        });
-
-        // Styles
-        effect.domElement.style.position = 'absolute';
-        effect.domElement.style.top = '0';
-        effect.domElement.style.left = '0';
-        effect.domElement.style.width = '100%';
-        effect.domElement.style.height = '100%';
-        effect.domElement.style.pointerEvents = 'none';
-        effect.domElement.style.color = 'white';
-        effect.domElement.style.backgroundColor = 'transparent';
-
-        effectRef.current = effect;
-        gl.domElement.parentNode?.appendChild(effect.domElement);
-
-        return () => {
-            if (effect.domElement && effect.domElement.parentNode) {
-                effect.domElement.parentNode.removeChild(effect.domElement);
-            }
-        };
-
-    }, [gl]);
-
-    // Resize Handler
-    useEffect(() => {
-        if (effectRef.current && size.width > 0 && size.height > 0) {
-            effectRef.current.setSize(size.width, size.height);
-        }
-    }, [size]);
-
-    // Render Loop
-    useFrame(() => {
-        if (effectRef.current && size.width > 0 && size.height > 0) {
-            effectRef.current.render(scene, camera);
-        }
-    }, 1);
-
-    return null;
-}
-
-// 2. Spinning Geometry (Production Material)
-function SpinningGeometry() {
+function InteractiveHero() {
     const ref = useRef<THREE.Mesh>(null);
+    const velocity = useRef({ x: 0, y: 0 });
+    const lastPointer = useRef({ x: 0, y: 0 });
+
     useFrame((state, delta) => {
         if (ref.current) {
-            ref.current.rotation.x += delta * 0.2;
-            ref.current.rotation.y += delta * 0.25;
+            // 1. ROTAÇÃO "ZEN" (Idle)
+            // Gira apenas no eixo Z, CONSTANTE e LENTA
+            ref.current.rotation.z -= delta * 0.05;
+
+            // 2. INTERAÇÃO (Throw Physics)
+            // Calculamos o movimento do rato (Delta)
+            const deltaX = state.pointer.x - lastPointer.current.x;
+            const deltaY = state.pointer.y - lastPointer.current.y;
+
+            // Atualizamos a posição anterior
+            lastPointer.current.x = state.pointer.x;
+            lastPointer.current.y = state.pointer.y;
+
+            // Adicionamos o MOVIMENTO à velocidade (Push)
+            // Só adiciona força se o rato se mexer. Sem movimento = Sem força.
+            velocity.current.x += deltaY * 2; // Rato Y roda eixo X
+            velocity.current.y += deltaX * 2; // Rato X roda eixo Y
+
+            // 3. FRICÇÃO (Travagem)
+            // 0.90 abranda suavemente
+            velocity.current.x *= 0.90;
+            velocity.current.y *= 0.90;
+
+            // 4. APLICAÇÃO & LIMITE DE VELOCIDADE
+            // Limitamos a velocidade máxima a 0.05 (muito seguro)
+            const MAX_SPEED = 0.05;
+            const safeX = THREE.MathUtils.clamp(velocity.current.x, -MAX_SPEED, MAX_SPEED);
+            const safeY = THREE.MathUtils.clamp(velocity.current.y, -MAX_SPEED, MAX_SPEED);
+
+            ref.current.rotation.x += safeX;
+            ref.current.rotation.y += safeY;
         }
     });
 
     return (
-        <mesh ref={ref}>
-            <torusKnotGeometry args={[1, 0.3, 128, 32]} />
-
-            {/* Standard Material with low metalness for visibility */}
+        /* Optimized Geometry kept for performance */
+        /* Initial rotation to present the object nicely */
+        <TorusKnot ref={ref} args={[1, 0.35, 64, 16]} rotation={[0.5, 0.5, 0]}>
             <meshStandardMaterial
-                color="white"
-                roughness={0.4}
-                metalness={0.2}
-                emissive="#222"
+                roughness={0.4} // suave, não espelho
+                metalness={0.2} // ligeiro toque premium
+                color="#2a2a2a" // dark grey/black elegant
             />
-        </mesh>
+        </TorusKnot>
     );
 }
 
-// 3. Layout (Clean)
-export function HeroSection() {
-    const t = useTranslations();
-
+export default function HeroSection() {
     return (
-        <section className="h-screen bg-black flex flex-col lg:flex-row overflow-hidden relative">
-
-            {/* LEFT COLUMN: Typography */}
-            <div className="w-full lg:w-1/2 p-8 lg:p-20 z-10 flex flex-col justify-center h-full relative">
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6"
-                >
-                    SYSTEM_ <br />
-                    <span className="text-white/50">ONLINE</span>
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-xl text-white/70 font-mono max-w-md leading-relaxed border-l-2 border-white/20 pl-6"
-                >
-                    {t("hero_subtitle")}
-                </motion.p>
+        <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+            {/* TEXTO (Voltou ao Original) */}
+            <div className="absolute z-10 text-center pointer-events-none mix-blend-difference px-4">
+                <h1 className="text-6xl md:text-9xl font-bold tracking-tighter text-white mb-4 leading-none">
+                    WEB
+                    <br />
+                    ENGINEERING
+                </h1>
+                <p className="text-white/60 text-lg md:text-xl font-mono tracking-widest uppercase">
+                    Arquitetura robusta. Performance obsessiva.
+                </p>
             </div>
 
-            {/* RIGHT COLUMN: 3D Visualization */}
-            <div className="flex-1 w-full lg:w-auto h-[50vh] lg:h-full relative flex items-center justify-center bg-transparent">
-                <div className="absolute inset-0">
-                    <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-                        <color attach="background" args={['black']} />
+            {/* CENA 3D */}
+            <div className="absolute inset-0 z-0">
+                {/* dpr=[1, 1.5] impede que ecrãs 4K matem a performance */}
+                <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 6], fov: 45 }}>
+                    <color attach="background" args={['black']} />
 
-                        {/* Lighting Setup */}
-                        <ambientLight intensity={1} />
-                        <directionalLight position={[10, 10, 5]} intensity={2} color="white" />
-                        <pointLight position={[-10, -10, -10]} intensity={1} color="#666" />
+                    <Environment preset="studio" />
+                    <ambientLight intensity={1} />
+                    {/* Luz direcional para criar sombras suaves nas curvas */}
+                    <directionalLight position={[5, 5, 5]} intensity={2} />
 
-                        <SpinningGeometry />
-                        <AsciiRenderer />
-                    </Canvas>
-                </div>
+                    <InteractiveHero />
+
+                </Canvas>
             </div>
-
         </section>
     );
 }

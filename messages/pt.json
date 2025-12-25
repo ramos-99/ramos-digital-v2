@@ -91,5 +91,17 @@
     "faq_q3": "Posso editar o conteúdo sozinho?",
     "faq_a3": "Sim! Posso integrar um CMS simples (como Sanity ou Contentful) para que possa atualizar o conteúdo sem tocar em código.",
     "contact_title": "Vamos trabalhar juntos",
-    "contact_desc": "Envie-me os detalhes do seu projeto e respondo em menos de 24 horas."
+    "contact_desc": "Envie-me os detalhes do seu projeto e respondo em menos de 24 horas.",
+    "web_projects": {
+        "title": "Projetos Selecionados",
+        "project1_title": "Neon Cortex",
+        "project1_desc": "Dashboard Next.js com visualização de dados em tempo real.",
+        "project1_tags": "React, D3.js, Tailwind",
+        "project2_title": "Astra Commerce",
+        "project2_desc": "Loja Shopify Headless com pré-visualização de produtos em 3D.",
+        "project2_tags": "Shopify, R3F, TypeScript",
+        "project3_title": "Zenith API",
+        "project3_desc": "Interface bancária de alto desempenho.",
+        "project3_tags": "Vue, Node.js, gRPC"
+    }
 }
