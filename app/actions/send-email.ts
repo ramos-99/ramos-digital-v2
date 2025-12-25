@@ -2,64 +2,27 @@
 
 export const runtime = 'edge';
 
-
-
 import { Resend } from 'resend';
-import { z } from 'zod';
-
-const schema = z.object({
-    name: z.string().min(2, "Nome muito curto"),
-    email: z.string().email("Email inválido"),
-    type: z.enum(['auditoria', 'projeto', 'consultoria', 'outro']),
-    message: z.string().min(10, "Mensagem muito curta"),
-});
 
 export async function sendEmail(prevState: any, formData: FormData) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const rawData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        type: formData.get('type'),
-        message: formData.get('message'),
-    };
-
-    const validated = schema.safeParse(rawData);
-
-    if (!validated.success) {
-        return {
-            success: false,
-            error: validated.error.issues[0].message,
-        };
-    }
-
-    const { name, email, type, message } = validated.data;
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const type = formData.get('type') as string;
+    const message = formData.get('message') as string;
 
     try {
-        // Using 'system@ramosdigital.pt' as verified domain sender
-        // If this fails due to DNS, user will switch to 'onboarding@resend.dev'
         await resend.emails.send({
-            // Added < > brackets for correct email format compliance
-            from: 'Ramos Digital System <system@ramosdigital.pt>',
+            from: 'Ramos Digital <system@ramosdigital.pt>',
             to: 'martim@ramosdigital.pt',
-            replyTo: email,
-            subject: `[LEAD] ${type.toUpperCase()} - ${name}`,
-            text: `
-NOVA MENSAGEM DO SITE
----------------------
-Nome: ${name}
-Email: ${email}
-Tipo: ${type}
-
-Mensagem:
-${message}
-      `,
+            subject: `Novo contacto: ${name}`,
+            reply_to: email,
+            text: `Nome: ${name}\nEmail: ${email}\nTipo: ${type}\nMensagem: ${message}`,
         });
-
         return { success: true };
-
     } catch (error) {
-        console.error('Send error:', error);
-        return { success: false, error: 'Erro ao enviar email.' };
+        console.error(error);
+        return { success: false, error: 'Falha ao enviar email' };
     }
 }
