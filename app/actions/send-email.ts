@@ -1,7 +1,6 @@
 'use server';
 
-// We force Edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge';
+
 
 import { Resend } from 'resend';
 import { z } from 'zod';
@@ -41,7 +40,7 @@ export async function sendEmail(prevState: any, formData: FormData) {
             // Added < > brackets for correct email format compliance
             from: 'Ramos Digital System <system@ramosdigital.pt>',
             to: 'martim@ramosdigital.pt',
-            reply_to: email, // Note: Resend Node SDK uses reply_to, React SDK uses replyTo. Adjust if needed.
+            replyTo: email,
             subject: `[LEAD] ${type.toUpperCase()} - ${name}`,
             text: `
 NOVA MENSAGEM DO SITE

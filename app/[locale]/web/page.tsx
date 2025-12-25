@@ -2,6 +2,8 @@ import HeroSection from "@/app/components/web/HeroSection";
 import CapabilitiesSection from "@/app/components/web/SystemCapabilities";
 import ContactSection from "@/app/components/web/ContactSection";
 
+export const runtime = 'edge';
+
 // React 19 / Next 15 Pattern for Params
 export default async function WebPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
