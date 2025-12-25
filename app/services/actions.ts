@@ -1,7 +1,5 @@
 'use server';
 
-export const runtime = 'edge';
-
 import { Resend } from 'resend';
 
 export async function submitContact(formData: FormData) {
