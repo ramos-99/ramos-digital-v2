@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,6 +20,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function ContactSection() {
     const [isPending, setIsPending] = useState(false);
     const [serverState, setServerState] = useState<{ success?: boolean; error?: any }>({});
+    const honeypotRef = useRef<HTMLInputElement>(null);
 
     const {
         register,
@@ -41,6 +42,7 @@ export default function ContactSection() {
             formData.append("email", data.email);
             formData.append("type", data.type);
             formData.append("message", data.message);
+            formData.append("_gotcha", honeypotRef.current?.value || "");
 
             const response = await fetch("/api/contact", {
                 method: "POST",
@@ -129,6 +131,7 @@ export default function ContactSection() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
                     {/* Honeypot field - hidden from real users, bots will fill it */}
                     <input
+                        ref={honeypotRef}
                         type="text"
                         name="_gotcha"
                         tabIndex={-1}
