@@ -69,8 +69,6 @@ export default function HeroSection() {
                             rotation={[0.1, 0.1, 0]}
                             polar={[-0.3, 0.3]}
                             azimuth={[-0.5, 0.5]}
-                            config={{ mass: 2, tension: 400 }}
-                            snap={{ mass: 4, tension: 300 }}
                         >
                             <ProceduralShape />
                         </PresentationControls>

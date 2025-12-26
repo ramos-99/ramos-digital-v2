@@ -53,8 +53,6 @@ export default function Hero3D() {
                         rotation={[0.1, 0.1, 0]}
                         polar={[-0.2, 0.2]}
                         azimuth={[-0.5, 0.5]}
-                        config={{ mass: 2, tension: 400 }}
-                        snap={{ mass: 4, tension: 300 }}
                     >
                         <ProceduralShape />
                     </PresentationControls>
