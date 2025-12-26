@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import ConfirmationEmail from '@/app/components/emails/ConfirmationEmail';
 
 export const runtime = 'edge';
 
@@ -44,15 +45,43 @@ export async function POST(request: NextRequest) {
 
         const { name, email, type, message } = result.data;
 
-        await resend.emails.send({
-            from: 'Ramos Digital <system@ramosdigital.pt>',
-            to: 'martim@ramosdigital.pt',
-            subject: `Novo contacto: ${name}`,
-            replyTo: email,
-            text: `Nome: ${name}\nEmail: ${email}\nTipo: ${type}\nMensagem: ${message}`,
-        });
+        // Send both emails in parallel
+        const [adminResult, userResult] = await Promise.allSettled([
+            // Email 1: Admin notification (text)
+            resend.emails.send({
+                from: 'Ramos Digital <system@ramosdigital.pt>',
+                to: 'martim@ramosdigital.pt',
+                subject: `Novo contacto: ${name}`,
+                replyTo: email,
+                text: `Nome: ${name}\nEmail: ${email}\nTipo: ${type}\nMensagem: ${message}`,
+            }),
+            // Email 2: User confirmation (React component)
+            resend.emails.send({
+                from: 'Ramos Digital <system@ramosdigital.pt>',
+                to: email,
+                subject: 'Mensagem Recebida | Ramos Digital',
+                react: ConfirmationEmail({ name, type }),
+            }),
+        ]);
 
-        return NextResponse.json({ success: true });
+        // Log any failures but don't crash
+        if (adminResult.status === 'rejected') {
+            console.error('Admin email failed:', adminResult.reason);
+        }
+        if (userResult.status === 'rejected') {
+            console.error('User confirmation email failed:', userResult.reason);
+        }
+
+        // Return success if at least the admin email was sent
+        if (adminResult.status === 'fulfilled') {
+            return NextResponse.json({ success: true });
+        }
+
+        // Both failed
+        return NextResponse.json(
+            { success: false, error: 'Falha ao enviar email' },
+            { status: 500 }
+        );
     } catch (error) {
         console.error('Contact form error:', error);
         return NextResponse.json(
@@ -61,3 +90,4 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+
