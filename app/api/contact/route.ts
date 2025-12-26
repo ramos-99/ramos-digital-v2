@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
         // Honeypot check: if _gotcha is filled, it's a bot
         const honeypot = formData.get('_gotcha');
         if (honeypot) {
-            // Silently return success to trick the bot
             return NextResponse.json({ success: true });
         }
 
@@ -46,8 +45,8 @@ export async function POST(request: NextRequest) {
         const { name, email, type, message } = result.data;
 
         // Send both emails in parallel
-        const [adminResult, userResult] = await Promise.allSettled([
-            // Email 1: Admin notification (text)
+        const [adminResult, clientResult] = await Promise.allSettled([
+            // Email 1: Admin notification
             resend.emails.send({
                 from: 'Ramos Digital <system@ramosdigital.pt>',
                 to: 'martim@ramosdigital.pt',
@@ -55,7 +54,7 @@ export async function POST(request: NextRequest) {
                 replyTo: email,
                 text: `Nome: ${name}\nEmail: ${email}\nTipo: ${type}\nMensagem: ${message}`,
             }),
-            // Email 2: User confirmation (React component)
+            // Email 2: Client confirmation
             resend.emails.send({
                 from: 'Ramos Digital <system@ramosdigital.pt>',
                 to: email,
@@ -64,20 +63,25 @@ export async function POST(request: NextRequest) {
             }),
         ]);
 
-        // Log any failures but don't crash
+        // Log results for debugging
         if (adminResult.status === 'rejected') {
-            console.error('Admin email failed:', adminResult.reason);
-        }
-        if (userResult.status === 'rejected') {
-            console.error('User confirmation email failed:', userResult.reason);
+            console.error('Admin email failed:', JSON.stringify(adminResult.reason));
+        } else {
+            console.log('Admin email sent:', adminResult.value);
         }
 
-        // Return success if at least the admin email was sent
+        if (clientResult.status === 'rejected') {
+            console.error('Client email failed:', JSON.stringify(clientResult.reason));
+        } else {
+            console.log('Client email sent:', clientResult.value);
+        }
+
+        // Success if admin email was sent (client email is nice-to-have)
         if (adminResult.status === 'fulfilled') {
             return NextResponse.json({ success: true });
         }
 
-        // Both failed
+        // Admin email failed
         return NextResponse.json(
             { success: false, error: 'Falha ao enviar email' },
             { status: 500 }
@@ -85,9 +89,8 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Contact form error:', error);
         return NextResponse.json(
-            { success: false, error: 'Falha ao enviar email' },
+            { success: false, error: 'Erro interno do servidor' },
             { status: 500 }
         );
     }
 }
-
