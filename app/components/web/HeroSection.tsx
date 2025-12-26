@@ -1,89 +1,35 @@
 "use client";
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import {
-    Float,
-    PresentationControls,
-    MeshDistortMaterial,
-    Icosahedron
-} from "@react-three/drei";
-import { Suspense } from "react";
+import dynamic from "next/dynamic";
 
-function HolographicWireframe() {
-    return (
-        <Float
-            rotationIntensity={1.5}
-            floatIntensity={2}
-            speed={3}
-        >
-            <Icosahedron args={[1.5, 4]}>
-                <MeshDistortMaterial
-                    color="#06b6d4"
-                    wireframe={true}
-                    roughness={0}
-                    metalness={1}
-                    distort={0.4}
-                    speed={2}
-                />
-            </Icosahedron>
-        </Float>
-    );
-}
+const Hero3D = dynamic(() => import("@/app/components/home/Hero3D"), {
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-full flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+        </div>
+    ),
+});
 
 export default function HeroSection() {
     return (
-        <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
-            {/* TEXTO */}
-            <div className="absolute z-10 text-center pointer-events-none mix-blend-difference px-4">
-                <h1 className="text-6xl md:text-9xl font-bold tracking-tighter text-white mb-4 leading-none">
-                    WEB
-                    <br />
-                    ENGINEERING
-                </h1>
-                <p className="text-white/60 text-lg md:text-xl font-mono tracking-widest uppercase">
-                    Arquitetura robusta. Performance obsessiva.
-                </p>
-            </div>
+        <section className="w-full min-h-screen bg-black">
+            <div className="grid lg:grid-cols-2 min-h-screen">
+                {/* LEFT COLUMN - Text */}
+                <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-20 lg:py-0 order-2 lg:order-1">
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6 leading-[0.9]">
+                        WEB
+                        <br />
+                        <span className="text-white/80">ENGINEERING</span>
+                    </h1>
+                    <p className="text-white/50 text-lg md:text-xl font-mono tracking-widest uppercase max-w-md">
+                        Arquitetura robusta. Performance obsessiva.
+                    </p>
+                </div>
 
-            {/* CENA 3D - Holographic Wireframe */}
-            <div className="absolute inset-0 z-0">
-                <Canvas
-                    dpr={[1, 1.5]}
-                    gl={{ antialias: false }}
-                    performance={{ min: 0.5 }}
-                    camera={{ position: [0, 0, 5], fov: 45 }}
-                >
-                    <Suspense fallback={null}>
-                        <color attach="background" args={['black']} />
-
-                        {/* Studio Lighting for Cyberpunk Effect */}
-                        <ambientLight intensity={0.2} />
-
-                        {/* Main Light - White */}
-                        <pointLight
-                            position={[10, 10, 10]}
-                            intensity={1.5}
-                            color="#ffffff"
-                        />
-
-                        {/* Rim Light - Hot Pink backlight */}
-                        <pointLight
-                            position={[-10, -10, -10]}
-                            intensity={2}
-                            color="#ec4899"
-                        />
-
-                        {/* Interactive holographic shape */}
-                        <PresentationControls
-                            global={false}
-                            rotation={[0.1, 0.1, 0]}
-                            polar={[-0.3, 0.3]}
-                            azimuth={[-0.5, 0.5]}
-                        >
-                            <HolographicWireframe />
-                        </PresentationControls>
-                    </Suspense>
-                </Canvas>
+                {/* RIGHT COLUMN - 3D Atom */}
+                <div className="h-[400px] lg:h-screen order-1 lg:order-2">
+                    <Hero3D />
+                </div>
             </div>
         </section>
     );
