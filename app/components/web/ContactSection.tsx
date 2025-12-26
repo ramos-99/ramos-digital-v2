@@ -127,6 +127,14 @@ export default function ContactSection() {
 
                 {/* DIREITA: THE FORM */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+                    {/* Honeypot field - hidden from real users, bots will fill it */}
+                    <input
+                        type="text"
+                        name="_gotcha"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        className="hidden"
+                    />
 
                     {/* INPUT: NAME */}
                     <div className="group">
