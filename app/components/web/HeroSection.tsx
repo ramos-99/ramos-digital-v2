@@ -2,7 +2,6 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
 import {
-    Environment,
     Float,
     PresentationControls,
     MeshDistortMaterial,
@@ -10,20 +9,21 @@ import {
 } from "@react-three/drei";
 import { Suspense } from "react";
 
-function ProceduralShape() {
+function HolographicWireframe() {
     return (
         <Float
-            rotationIntensity={1}
+            rotationIntensity={1.5}
             floatIntensity={2}
-            speed={2}
+            speed={3}
         >
-            <Icosahedron args={[1.5, 15]}>
+            <Icosahedron args={[1.5, 4]}>
                 <MeshDistortMaterial
-                    color="#1a1a1a"
-                    roughness={0.4}
-                    metalness={0.8}
-                    distort={0.3}
-                    speed={1.5}
+                    color="#06b6d4"
+                    wireframe={true}
+                    roughness={0}
+                    metalness={1}
+                    distort={0.4}
+                    speed={2}
                 />
             </Icosahedron>
         </Float>
@@ -45,7 +45,7 @@ export default function HeroSection() {
                 </p>
             </div>
 
-            {/* CENA 3D - High Performance */}
+            {/* CENA 3D - Holographic Wireframe */}
             <div className="absolute inset-0 z-0">
                 <Canvas
                     dpr={[1, 1.5]}
@@ -56,21 +56,31 @@ export default function HeroSection() {
                     <Suspense fallback={null}>
                         <color attach="background" args={['black']} />
 
-                        {/* Lighting */}
-                        <ambientLight intensity={0.3} />
-                        <directionalLight position={[5, 5, 5]} intensity={0.8} />
+                        {/* Studio Lighting for Cyberpunk Effect */}
+                        <ambientLight intensity={0.2} />
 
-                        {/* Low-res environment for subtle reflections */}
-                        <Environment preset="city" resolution={256} />
+                        {/* Main Light - White */}
+                        <pointLight
+                            position={[10, 10, 10]}
+                            intensity={1.5}
+                            color="#ffffff"
+                        />
 
-                        {/* Interactive 3D shape */}
+                        {/* Rim Light - Hot Pink backlight */}
+                        <pointLight
+                            position={[-10, -10, -10]}
+                            intensity={2}
+                            color="#ec4899"
+                        />
+
+                        {/* Interactive holographic shape */}
                         <PresentationControls
                             global={false}
                             rotation={[0.1, 0.1, 0]}
                             polar={[-0.3, 0.3]}
                             azimuth={[-0.5, 0.5]}
                         >
-                            <ProceduralShape />
+                            <HolographicWireframe />
                         </PresentationControls>
                     </Suspense>
                 </Canvas>
@@ -78,4 +88,3 @@ export default function HeroSection() {
         </section>
     );
 }
-
