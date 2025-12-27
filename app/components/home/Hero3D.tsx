@@ -23,7 +23,7 @@ interface ModelProps {
 
 function Model({ open, hinge, ...props }: ModelProps) {
     const group = useRef<THREE.Group>(null!);
-    const { nodes, materials } = useGLTF("/3d/mac-draco.glb") as MacGLTF;
+    const { nodes, materials } = useGLTF("/3d/mac-draco.glb") as unknown as MacGLTF;
 
     const [hovered, setHovered] = useState(false);
     useEffect(() => {
