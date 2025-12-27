@@ -52,15 +52,15 @@ export function ProjectsSection() {
     <motion.section
       ref={containerRef}
       id="projects"
-      className="bg-white py-24 md:py-32 px-4 md:px-6 relative"
+      className="bg-white py-20 md:py-24 px-4 md:px-6 relative rounded-b-[2.5rem]"
       style={{ opacity, filter, scale }}
     >
       <BlurFade yOffset={40} blur="20px">
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
-          <div className="mb-16 md:mb-24 flex items-baseline gap-4">
-            <h2 className="text-3xl md:text-5xl font-bold text-black tracking-tight">
+          <div className="mb-12 md:mb-16 flex items-baseline gap-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-black tracking-tighter leading-none">
               {t("projects_title")}
               <span className="text-electric-400">.</span>
             </h2>
@@ -82,7 +82,7 @@ export function ProjectsSection() {
                     key={project.key}
                     onMouseEnter={() => setActiveProject(index)}
                     onMouseLeave={() => setActiveProject(null)}
-                    className="group py-0 md:py-12 md:border-t border-neutral-200 cursor-pointer transition-opacity duration-500"
+                    className="group py-0 md:py-8 md:border-t border-neutral-200 cursor-pointer transition-opacity duration-500"
                     style={{ opacity: isDimmed ? 0.3 : 1 }}
                   >
                     <div className="flex flex-col gap-4 md:gap-2">

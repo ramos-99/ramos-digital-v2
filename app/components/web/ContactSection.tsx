@@ -4,10 +4,9 @@ import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { clsx } from "clsx";
-import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { Github, Twitter, Linkedin, ArrowUpRight } from "lucide-react";
 
-// Schema (Matched with Server Action logic, though validation is now manual in action)
+// Schema
 const formSchema = z.object({
     name: z.string().min(2, "Mínimo 2 caracteres"),
     email: z.string().email("Email inválido"),
@@ -29,9 +28,7 @@ export default function ContactSection() {
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            type: "projeto",
-        },
+        defaultValues: { type: "projeto" },
     });
 
     const onSubmit = async (data: FormData) => {
@@ -64,55 +61,75 @@ export default function ContactSection() {
         }
     };
 
-    // --- RENDER: SUCCESS STATE ---
+    // --- SUCCESS STATE ---
     if (serverState.success) {
         return (
-            <section className="container mx-auto px-6 py-24 flex items-center justify-center min-h-[50vh]">
-                <div className="text-center font-mono animate-in fade-in zoom-in duration-500">
-                    <div className="w-16 h-1 bg-green-500 mx-auto mb-6" />
-                    <h3 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tighter">
-                        MENSAGEM RECEBIDA.
-                    </h3>
-                    <p className="text-white/50 text-sm tracking-widest uppercase">
-                        O protocolo de comunicação foi iniciado.
-                        <br />
-                        Aguarde resposta em breve.
-                    </p>
-                    <button
-                        onClick={() => setServerState({})}
-                        className="mt-8 text-xs text-white/30 hover:text-white underline underline-offset-4 decoration-white/20 transition-colors"
-                    >
-                        [ ENVIAR OUTRA ]
-                    </button>
+            <section className="relative bg-zinc-950 px-4 md:px-8 py-24 md:py-32 overflow-hidden">
+                {/* Ambient Backlight Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[80%] bg-[radial-gradient(closest-side,rgba(255,255,255,0.15)_0%,transparent_100%)] blur-3xl pointer-events-none" aria-hidden="true" />
+
+                <div className="relative max-w-6xl mx-auto bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] rounded-[2.5rem] p-12 md:p-20 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] flex items-center justify-center min-h-[400px]">
+                    <div className="text-center animate-in fade-in zoom-in duration-500">
+                        <div className="w-16 h-1 bg-black mx-auto mb-8" />
+                        <h3 className="text-4xl md:text-6xl font-bold text-black mb-4 tracking-tighter">
+                            MENSAGEM RECEBIDA.
+                        </h3>
+                        <p className="text-zinc-500 font-mono text-sm tracking-widest uppercase">
+                            Resposta em breve.
+                        </p>
+                        <button
+                            onClick={() => setServerState({})}
+                            className="mt-10 px-8 py-3 bg-black text-white font-mono text-sm uppercase tracking-widest hover:bg-zinc-800 transition-colors"
+                        >
+                            Enviar Outra
+                        </button>
+                    </div>
                 </div>
             </section>
         );
     }
 
-    // --- RENDER: FORM STATE ---
+    // --- FORM STATE ---
     return (
-        <section className="container mx-auto px-6 py-24 border-t border-white/10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32">
+        <section className="relative bg-zinc-950 px-4 md:px-8 py-24 md:py-32 overflow-hidden">
+            {/* Ambient Backlight Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[80%] bg-[radial-gradient(closest-side,rgba(255,255,255,0.15)_0%,transparent_100%)] blur-3xl pointer-events-none" aria-hidden="true" />
 
-                {/* ESQUERDA: DIRECT CHANNEL */}
-                <div className="flex flex-col justify-between h-full">
-                    <div>
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white mb-2">
-                            Contato
-                        </h2>
-                        <p className="text-white/40 font-mono text-xs tracking-[0.2em] mb-12">
-                            CHANNEL_OPEN // READY
-                        </p>
+            <div className="relative max-w-6xl mx-auto bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] rounded-[2.5rem] p-8 md:p-16 lg:p-20 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)]">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
 
-                        <div className="space-y-8">
+                    {/* LEFT: CONTEXT */}
+                    <div className="flex flex-col justify-between">
+                        <div>
+                            <p className="font-mono text-xs uppercase tracking-[0.3em] text-zinc-400 mb-4">
+                                Contacto
+                            </p>
+                            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-black mb-6 leading-[0.9]">
+                                VAMOS
+                                <br />
+                                CONSTRUIR.
+                            </h2>
+                            <p className="text-zinc-500 max-w-sm text-lg leading-relaxed">
+                                Projetos ambiciosos merecem engenharia de precisão.
+                                Fale comigo sobre a sua visão.
+                            </p>
+                        </div>
+
+                        <div className="mt-16 space-y-8">
                             <div>
-                                <h4 className="text-white/30 text-[10px] font-mono tracking-widest uppercase mb-2">EMAIL PRINCIPAL</h4>
-                                <a href="mailto:martim@ramosdigital.pt" className="text-xl md:text-2xl text-white hover:text-white/70 transition-colors font-light">
+                                <p className="font-mono text-xs uppercase tracking-widest text-zinc-400 mb-2">
+                                    Email
+                                </p>
+                                <a
+                                    href="mailto:martim@ramosdigital.pt"
+                                    className="text-xl text-black hover:text-zinc-600 transition-colors inline-flex items-center gap-2 group"
+                                >
                                     martim@ramosdigital.pt
+                                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </a>
                             </div>
 
-                            <div className="flex gap-6">
+                            <div className="flex gap-4">
                                 <SocialLink href="https://github.com" icon={Github} />
                                 <SocialLink href="https://twitter.com" icon={Twitter} />
                                 <SocialLink href="https://linkedin.com" icon={Linkedin} />
@@ -120,108 +137,99 @@ export default function ContactSection() {
                         </div>
                     </div>
 
-                    <div className="hidden lg:block">
-                        <p className="text-white/20 text-[10px] font-mono max-w-xs leading-relaxed">
-                            ESTE SISTEMA É MONITORIZADO. TODAS AS COMUNICAÇÕES SÃO CRIPTOGRAFADAS E ARQUIVADAS PARA AUDITORIA.
-                        </p>
-                    </div>
-                </div>
-
-                {/* DIREITA: THE FORM */}
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
-                    {/* Honeypot field - hidden from real users, bots will fill it */}
-                    <input
-                        ref={honeypotRef}
-                        type="text"
-                        name="_gotcha"
-                        tabIndex={-1}
-                        autoComplete="off"
-                        className="hidden"
-                    />
-
-                    {/* INPUT: NAME */}
-                    <div className="group">
-                        <label className="block text-[10px] font-mono tracking-widest text-white/40 uppercase mb-2 group-focus-within:text-white transition-colors">
-                            Identificação (Nome)
-                        </label>
+                    {/* RIGHT: THE FORM */}
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+                        {/* Honeypot */}
                         <input
-                            {...register("name")}
-                            className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-white transition-colors font-light text-xl rounded-none placeholder:text-white/10"
-                            placeholder="Ex: Ana Silva"
+                            ref={honeypotRef}
+                            type="text"
+                            name="_gotcha"
+                            tabIndex={-1}
                             autoComplete="off"
+                            className="hidden"
                         />
-                        {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
-                    </div>
 
-                    {/* INPUT: EMAIL */}
-                    <div className="group">
-                        <label className="block text-[10px] font-mono tracking-widest text-white/40 uppercase mb-2 group-focus-within:text-white transition-colors">
-                            Ponto de Contato (Email)
-                        </label>
-                        <input
-                            {...register("email")}
-                            type="email"
-                            className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-white transition-colors font-light text-xl rounded-none placeholder:text-white/10"
-                            placeholder="ana@empresa.com"
-                        />
-                        {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-                    </div>
+                        {/* NAME */}
+                        <div className="group">
+                            <label className="block font-mono text-xs uppercase tracking-widest text-zinc-400 mb-3 group-focus-within:text-black transition-colors">
+                                Nome
+                            </label>
+                            <input
+                                {...register("name")}
+                                className="w-full bg-transparent border-b-2 border-zinc-200 text-black py-3 focus:outline-none focus:border-black transition-colors text-xl placeholder:text-zinc-300"
+                                placeholder="O seu nome"
+                                autoComplete="off"
+                            />
+                            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+                        </div>
 
-                    {/* SELECT: TYPE */}
-                    <div className="group">
-                        <label className="block text-[10px] font-mono tracking-widest text-white/40 uppercase mb-2 group-focus-within:text-white transition-colors">
-                            Classificação
-                        </label>
-                        <div className="relative">
-                            <select
-                                {...register("type")}
-                                className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-white transition-colors font-light text-xl rounded-none appearance-none cursor-pointer"
-                            >
-                                <option value="projeto" className="bg-black text-white">Novo Projeto</option>
-                                <option value="auditoria" className="bg-black text-white">Auditoria Técnica</option>
-                                <option value="consultoria" className="bg-black text-white">Consultoria</option>
-                                <option value="outro" className="bg-black text-white">Outro Assunto</option>
-                            </select>
-                            <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 text-xs font-mono">
-                                [▼]
+                        {/* EMAIL */}
+                        <div className="group">
+                            <label className="block font-mono text-xs uppercase tracking-widest text-zinc-400 mb-3 group-focus-within:text-black transition-colors">
+                                Email
+                            </label>
+                            <input
+                                {...register("email")}
+                                type="email"
+                                className="w-full bg-transparent border-b-2 border-zinc-200 text-black py-3 focus:outline-none focus:border-black transition-colors text-xl placeholder:text-zinc-300"
+                                placeholder="email@exemplo.com"
+                            />
+                            {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+                        </div>
+
+                        {/* TYPE */}
+                        <div className="group">
+                            <label className="block font-mono text-xs uppercase tracking-widest text-zinc-400 mb-3 group-focus-within:text-black transition-colors">
+                                Tipo de Projeto
+                            </label>
+                            <div className="relative">
+                                <select
+                                    {...register("type")}
+                                    className="w-full bg-transparent border-b-2 border-zinc-200 text-black py-3 focus:outline-none focus:border-black transition-colors text-xl appearance-none cursor-pointer"
+                                >
+                                    <option value="projeto">Novo Projeto</option>
+                                    <option value="auditoria">Auditoria Técnica</option>
+                                    <option value="consultoria">Consultoria</option>
+                                    <option value="outro">Outro Assunto</option>
+                                </select>
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                                    ▼
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* TEXTAREA: MESSAGE */}
-                    <div className="group">
-                        <label className="block text-[10px] font-mono tracking-widest text-white/40 uppercase mb-2 group-focus-within:text-white transition-colors">
-                            Dados da Transmissão
-                        </label>
-                        <textarea
-                            {...register("message")}
-                            rows={4}
-                            className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-white transition-colors font-light text-xl rounded-none resize-none placeholder:text-white/10"
-                            placeholder="Descreva o objetivo..."
-                        />
-                        {errors.message && <ErrorMessage>{errors.message.message}</ErrorMessage>}
-                    </div>
+                        {/* MESSAGE */}
+                        <div className="group">
+                            <label className="block font-mono text-xs uppercase tracking-widest text-zinc-400 mb-3 group-focus-within:text-black transition-colors">
+                                Mensagem
+                            </label>
+                            <textarea
+                                {...register("message")}
+                                rows={4}
+                                className="w-full bg-transparent border-b-2 border-zinc-200 text-black py-3 focus:outline-none focus:border-black transition-colors text-xl resize-none placeholder:text-zinc-300"
+                                placeholder="Descreva o seu projeto..."
+                            />
+                            {errors.message && <ErrorMessage>{errors.message.message}</ErrorMessage>}
+                        </div>
 
-                    {/* SUBMIT BUTTON */}
-                    <div className="pt-8">
-                        <button
-                            type="submit"
-                            disabled={isPending}
-                            className="w-full md:w-auto px-8 py-4 border border-white/20 text-white font-mono text-sm tracking-[0.2em] hover:bg-white hover:text-black hover:border-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
-                        >
-                            <span className="relative z-10">
-                                {isPending ? "[ ENVIANDO... ]" : "[ INICIAR_PROTOCOLO ]"}
-                            </span>
-                        </button>
+                        {/* SUBMIT */}
+                        <div className="pt-6">
+                            <button
+                                type="submit"
+                                disabled={isPending}
+                                className="w-full py-5 bg-black text-white font-mono text-sm uppercase tracking-widest hover:bg-white hover:text-black border-2 border-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isPending ? "A Enviar..." : "Enviar Mensagem"}
+                            </button>
 
-                        {/* Server Error Message */}
-                        {serverState.error && (
-                            <p className="mt-4 text-red-500 font-mono text-xs">
-                                ERRO: {typeof serverState.error === 'string' ? serverState.error : "Falha na validação."}
-                            </p>
-                        )}
-                    </div>
-                </form>
+                            {serverState.error && (
+                                <p className="mt-4 text-red-600 font-mono text-xs uppercase">
+                                    Erro: {typeof serverState.error === "string" ? serverState.error : "Falha na validação."}
+                                </p>
+                            )}
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
     );
@@ -229,19 +237,19 @@ export default function ContactSection() {
 
 // --- SUBCOMPONENTS ---
 
-function SocialLink({ href, icon: Icon }: { href: string; icon: any }) {
+function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
     return (
         <a
             href={href}
             target="_blank"
             rel="noreferrer"
-            className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-white transition-all duration-300"
+            className="w-12 h-12 border-2 border-zinc-200 flex items-center justify-center text-zinc-400 hover:text-black hover:border-black transition-all duration-300"
         >
-            <Icon size={18} />
+            <Icon size={20} />
         </a>
     );
 }
 
 function ErrorMessage({ children }: { children: React.ReactNode }) {
-    return <p className="mt-2 text-red-500 font-mono text-[10px] uppercase tracking-wide">{children}</p>;
+    return <p className="mt-2 text-red-600 font-mono text-xs uppercase tracking-wide">{children}</p>;
 }
