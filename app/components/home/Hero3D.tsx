@@ -5,7 +5,7 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, useGLTF, ContactShadows, Html } from "@react-three/drei";
 import { useSpring } from "@react-spring/core";
-import { a as three, SpringValue } from "@react-spring/three";
+import { a as three, Interpolation } from "@react-spring/three";
 import { useInView } from "react-intersection-observer";
 import type { GLTF } from "three-stdlib";
 
@@ -17,7 +17,7 @@ type MacGLTF = GLTF & {
 
 interface ModelProps {
     open: boolean;
-    hinge: SpringValue<number>;
+    hinge: Interpolation<number, number>;
     [key: string]: unknown;
 }
 
