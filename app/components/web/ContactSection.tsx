@@ -237,7 +237,7 @@ export default function ContactSection() {
 
 // --- SUBCOMPONENTS ---
 
-function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
+function SocialLink({ href, icon: Icon }: { href: string; icon: typeof Github }) {
     return (
         <a
             href={href}
