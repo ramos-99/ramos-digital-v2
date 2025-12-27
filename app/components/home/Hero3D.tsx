@@ -5,12 +5,25 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, useGLTF, ContactShadows, Html } from "@react-three/drei";
 import { useSpring } from "@react-spring/core";
-import { a as three } from "@react-spring/three";
+import { a as three, SpringValue } from "@react-spring/three";
 import { useInView } from "react-intersection-observer";
+import type { GLTF } from "three-stdlib";
 
-function Model({ open, hinge, ...props }: { open: boolean; hinge: any;[key: string]: any }) {
+// Type for the MacBook GLTF model
+type MacGLTF = GLTF & {
+    nodes: Record<string, THREE.Mesh>;
+    materials: Record<string, THREE.Material>;
+};
+
+interface ModelProps {
+    open: boolean;
+    hinge: SpringValue<number>;
+    [key: string]: unknown;
+}
+
+function Model({ open, hinge, ...props }: ModelProps) {
     const group = useRef<THREE.Group>(null!);
-    const { nodes, materials } = useGLTF("/3d/mac-draco.glb") as any;
+    const { nodes, materials } = useGLTF("/3d/mac-draco.glb") as MacGLTF;
 
     const [hovered, setHovered] = useState(false);
     useEffect(() => {

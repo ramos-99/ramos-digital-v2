@@ -18,7 +18,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function ContactSection() {
     const [isPending, setIsPending] = useState(false);
-    const [serverState, setServerState] = useState<{ success?: boolean; error?: any }>({});
+    const [serverState, setServerState] = useState<{ success?: boolean; error?: string | null }>({});
     const honeypotRef = useRef<HTMLInputElement>(null);
 
     const {
